@@ -1,4 +1,4 @@
-function oauthSignIn() {
+export function oauthSignIn() {
   const oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
 
   const params = {
@@ -23,4 +23,24 @@ function oauthSignIn() {
   console.log(`Open the following URL to log in:\n${fullUrl}`);
 }
 
-oauthSignIn();
+export function encrypt(text: string): string {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(ALGORITHM, SECRET_KEY, iv);
+  const encrypted = Buffer.concat([
+    cipher.update(text, "utf8"),
+    cipher.final(),
+  ]);
+  return `${iv.toString("hex")}:${encrypted.toString("hex")}`;
+}
+
+export function decrypt(encryptedText: string): string {
+  const [ivHex, dataHex] = encryptedText.split(":");
+  const iv = Buffer.from(ivHex, "hex");
+  const encrypted = Buffer.from(dataHex, "hex");
+  const decipher = crypto.createDecipheriv(ALGORITHM, SECRET_KEY, iv);
+  const decrypted = Buffer.concat([
+    decipher.update(encrypted),
+    decipher.final(),
+  ]);
+  return decrypted.toString("utf8");
+}
