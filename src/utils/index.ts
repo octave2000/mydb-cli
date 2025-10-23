@@ -1,3 +1,6 @@
+import crypto from "crypto";
+import fs from "fs";
+
 export function oauthSignIn() {
   const oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
 
@@ -23,8 +26,11 @@ export function oauthSignIn() {
   console.log(`Open the following URL to log in:\n${fullUrl}`);
 }
 
+const ALGORITHM = "aes-256-ctr";
+const SECRET_KEY = "12345678901234567890123456789012";
 export function encrypt(text: string): string {
   const iv = crypto.randomBytes(16);
+  const key = crypto.randomBytes(32);
   const cipher = crypto.createCipheriv(ALGORITHM, SECRET_KEY, iv);
   const encrypted = Buffer.concat([
     cipher.update(text, "utf8"),
@@ -35,8 +41,8 @@ export function encrypt(text: string): string {
 
 export function decrypt(encryptedText: string): string {
   const [ivHex, dataHex] = encryptedText.split(":");
-  const iv = Buffer.from(ivHex, "hex");
-  const encrypted = Buffer.from(dataHex, "hex");
+  const iv = Buffer.from(ivHex!, "hex");
+  const encrypted = Buffer.from(dataHex!, "hex");
   const decipher = crypto.createDecipheriv(ALGORITHM, SECRET_KEY, iv);
   const decrypted = Buffer.concat([
     decipher.update(encrypted),

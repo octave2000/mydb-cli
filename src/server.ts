@@ -1,28 +1,42 @@
+#!/usr/bin/env node
+
 import express, { type Request, type Response } from "express";
 import fs from "fs";
-import keytar from "keytar";
+import path from "path";
+import { encrypt } from "./utils";
 
 const PORT = 3000;
-const SERVICE = "mydbportal";
-const ACCOUNT = "user_credentials";
+const tPath = path.join(process.cwd(), "t");
+fs.mkdirSync(tPath, { recursive: true });
+
 const app = express();
 app.use(express.json({ limit: "10kb" }));
 
 app.get("/", async (req: Request, res: Response) => {
   const cookies = req.headers.cookie;
-  const contents = cookies?.split(";");
-  if (!contents) {
+  console.log("Cookies header:", cookies);
+
+  if (!cookies) {
+    res.status(400).send("No cookies found");
     return;
   }
-  const token = contents[0]?.split("=")[1];
+
+  const token = cookies.split(";")[0]?.split("=")[1];
   if (!token) {
     res.status(400).send("No token found");
     return;
   }
-  await keytar.setPassword(SERVICE, ACCOUNT, token);
-  res.send("✅ Logged in successfully! You can close this tab.");
+
+  const encrypted = encrypt(token);
+
+  const filePath = path.join(tPath, "ts.key");
+  console.log("Writing token to:", filePath);
+
+  fs.writeFileSync(filePath, encrypted);
+
+  res.send("Logged in successfully! You can close this tab.");
 });
 
 app.listen(PORT, () => {
-  console.log(`running on ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
