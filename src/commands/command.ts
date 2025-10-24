@@ -3,8 +3,9 @@
 import { Command } from "commander";
 import fs from "fs";
 import path from "path";
-import { decrypt } from "../utils";
+import { decrypt, getGlobalKey, oauthSignIn } from "../utils";
 import inquirer from "inquirer";
+import { stdout } from "process";
 
 const program = new Command();
 program
@@ -16,13 +17,11 @@ program
   .command("list")
   .description("List all your databases")
   .action(async () => {
-    const dtoken = fs.readFileSync(
-      path.join(process.cwd(), "t/ts.key"),
-      "utf-8",
-    );
+    const dtoken = getGlobalKey();
+
     const token = decrypt(dtoken);
 
-    const res = await fetch("http://localhost:6100/api/cli", {
+    const res = await fetch("http://localhost:3000/api/cli", {
       headers: {
         Cookie: `authjs.session-token=${token}`,
       },
@@ -41,7 +40,7 @@ program
     }
 
     const answer = await inquirer.prompt({
-      name: "databases",
+      name: "database",
       message: "Select a database:",
       type: "rawlist",
       choices: dbs.map((db: any) => ({
@@ -50,17 +49,90 @@ program
       })),
     });
 
-    console.log(" You selected:", answer.database);
+    const results = await fetch(
+      `http://localhost:3000/api/cli/${answer.database}`,
+      {
+        headers: {
+          Cookie: `authjs.session-token=${token}`,
+        },
+      },
+    );
+    const data = await results.json();
+
+    console.log(data);
   });
 
 program
   .command("create")
   .description("Create database")
   .action(async () => {
-    const answers = await inquirer.prompt({
-      name: "create database",
-      message: "input name",
+    const dtoken = getGlobalKey();
+
+    const token = decrypt(dtoken);
+
+    const res = await fetch("http://localhost:3000/api/cli", {
+      headers: {
+        Cookie: `authjs.session-token=${token}`,
+      },
     });
+    const jsons: any = await res.json();
+    const availableServers = jsons.servers.map((s: any) => ({
+      name: s.name,
+      id: s.id,
+      region: s.region,
+    }));
+    const dbtype = await inquirer.prompt({
+      name: "type",
+      message: "chose database type",
+      type: "list",
+      choices: ["MySQL", "PostgreSQL", "MongoDB"],
+    });
+    const dbname = await inquirer.prompt({
+      name: "name",
+      message: "input name",
+      type: "input",
+    });
+    const serverid = await inquirer.prompt({
+      name: "server",
+      message: "Choose server",
+      type: "rawlist",
+      choices: availableServers.map((a: any) => ({
+        name: `${a.name} (${a.region})`,
+        value: `${a.id}`,
+      })),
+    });
+
+    const formData = new FormData();
+    formData.append("name", dbname.name);
+    formData.append("type", dbtype.type);
+    formData.append("serverId", serverid.server);
+    const result = await fetch("http://localhost:3000/api/cli", {
+      method: "POST",
+      headers: {
+        Cookie: `authjs.session-token=${token}`,
+      },
+      body: formData,
+    });
+    const connectionString: any = await result.json();
+    const envpath = path.join(process.cwd(), ".env");
+    fs.mkdirSync(path.dirname(envpath), { recursive: true });
+
+    fs.writeFile(
+      envpath,
+      `DATABASE_URL =${connectionString}`,
+      { flag: "a" },
+      (err) => {
+        if (err) throw err;
+        console.log("Added to file!");
+      },
+    );
+    console.log(connectionString);
   });
 
+program
+  .command("login")
+  .description("login to mydbportal")
+  .action(async () => {
+    await oauthSignIn();
+  });
 program.parse();

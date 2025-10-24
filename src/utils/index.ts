@@ -1,14 +1,17 @@
 import crypto from "crypto";
 import fs from "fs";
+import path from "path";
+import os from "os";
+import open from "open";
 
-export function oauthSignIn() {
+export async function oauthSignIn() {
   const oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
 
   const params = {
     client_id:
       "1044296166148-pidlfu0hhd558f9j7hh726k7khu7udtm.apps.googleusercontent.com",
 
-    redirect_uri: "http://localhost:3000",
+    redirect_uri: "http://localhost:5000",
     scope: "openid profile email",
 
     response_type: "token",
@@ -23,7 +26,7 @@ export function oauthSignIn() {
   const urlParams = new URLSearchParams(params).toString();
   const fullUrl = `${oauth2Endpoint}?${urlParams}`;
 
-  console.log(`Open the following URL to log in:\n${fullUrl}`);
+  await open(fullUrl);
 }
 
 const ALGORITHM = "aes-256-ctr";
@@ -49,4 +52,20 @@ export function decrypt(encryptedText: string): string {
     decipher.final(),
   ]);
   return decrypted.toString("utf8");
+}
+
+const configDir = path.join(os.homedir(), ".mydp");
+const keyPath = path.join(configDir, "key.json");
+
+fs.mkdirSync(configDir, { recursive: true });
+
+export function saveGlobalKey(key: any) {
+  fs.writeFileSync(keyPath, JSON.stringify({ key }), "utf-8");
+  console.log("Saved global key to ~/.mydp/key.json");
+}
+
+export function getGlobalKey() {
+  if (!fs.existsSync(keyPath)) return null;
+  const data = JSON.parse(fs.readFileSync(keyPath, "utf-8"));
+  return data.key;
 }

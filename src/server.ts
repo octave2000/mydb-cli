@@ -3,9 +3,9 @@
 import express, { type Request, type Response } from "express";
 import fs from "fs";
 import path from "path";
-import { encrypt } from "./utils";
+import { encrypt, oauthSignIn, saveGlobalKey } from "./utils";
 
-const PORT = 3000;
+const PORT = 5000;
 const tPath = path.join(process.cwd(), "t");
 fs.mkdirSync(tPath, { recursive: true });
 
@@ -21,7 +21,10 @@ app.get("/", async (req: Request, res: Response) => {
     return;
   }
 
-  const token = cookies.split(";")[0]?.split("=")[1];
+  const token = cookies
+    ?.split(";")
+    .find((c) => c.trim().startsWith("authjs.session-token="))
+    ?.split("=")[1];
   if (!token) {
     res.status(400).send("No token found");
     return;
@@ -29,10 +32,7 @@ app.get("/", async (req: Request, res: Response) => {
 
   const encrypted = encrypt(token);
 
-  const filePath = path.join(tPath, "ts.key");
-  console.log("Writing token to:", filePath);
-
-  fs.writeFileSync(filePath, encrypted);
+  saveGlobalKey(encrypted);
 
   res.send("Logged in successfully! You can close this tab.");
 });
