@@ -8,8 +8,6 @@
   "scripts": {
     "build": "tsup src/commands/command.ts --format cjs,esm --dts",
     "dev": "tsc -w",
-    "devTest": "vitest",
-    "test": "vitest run",
     "lint": "tsc",
     "ci": "pnpm run lint && pnpm run test && pnpm run build ",
     "release": "pnpm run lint && pnpm run test && pnpm run build && changeset publish"
@@ -22,6 +20,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@changesets/cli": "^2.29.7",
     "@types/express": "^5.0.3",
     "@types/inquirer": "^9.0.9",
     "commander": "^14.0.1",
@@ -32,6 +31,7 @@
     "node-fetch": "^3.3.2",
     "open": "^10.2.0",
     "playwright": "1.55.0-alpha-2025-08-10",
-    "tsup": "^8.5.0"
+    "tsup": "^8.5.0",
+    "yocto-spinner": "^1.0.0"
   }
 }
