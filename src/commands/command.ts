@@ -7,6 +7,7 @@ import { decrypt, getGlobalKey, oauthSignIn } from "../utils";
 import inquirer from "inquirer";
 import { stdout } from "process";
 import yoctoSpinner from "yocto-spinner";
+import { startServerOnce } from "../server";
 
 const program = new Command();
 const spinner = yoctoSpinner({ text: "mydbportal…" }).start();
@@ -62,7 +63,7 @@ program
         headers: {
           Cookie: `authjs.session-token=${token}`,
         },
-      },
+      }
     );
     spinner.success();
     const data = await results.json();
@@ -135,7 +136,7 @@ program
       (err) => {
         if (err) throw err;
         console.log("Added to file!");
-      },
+      }
     );
     console.log(connectionString);
   });
@@ -147,5 +148,6 @@ program
     spinner.start("Openning browser");
     await oauthSignIn();
     spinner.success();
+    await startServerOnce();
   });
 program.parse();

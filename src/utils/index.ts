@@ -61,7 +61,6 @@ fs.mkdirSync(configDir, { recursive: true });
 
 export function saveGlobalKey(key: any) {
   fs.writeFileSync(keyPath, JSON.stringify({ key }), "utf-8");
-  console.log("Saved global key to ~/.mydp/key.json");
 }
 
 export function getGlobalKey() {
