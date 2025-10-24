@@ -10,8 +10,8 @@
     "build": "tsup src/commands/command.ts --format cjs,esm --dts",
     "dev": "tsc -w",
     "lint": "tsc",
-    "ci": "pnpm run lint && pnpm run test && pnpm run build ",
-    "release": "pnpm run lint && pnpm run test && pnpm run build && changeset publish"
+    "ci": "bun run lint  && bun run build ",
+    "release": "bun run lint  && bun run build && changeset publish"
   },
   "private": true,
   "devDependencies": {
