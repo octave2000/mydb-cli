@@ -1,5 +1,11 @@
 # mydbportal-cli
 
+## 0.2.2
+
+### Patch Changes
+
+- added auth functionalities
+
 ## 0.2.1
 
 ### Patch Changes
