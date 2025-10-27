@@ -1,5 +1,11 @@
 # mydbportal-cli
 
+## 0.2.3
+
+### Patch Changes
+
+- added a readme doc
+
 ## 0.2.2
 
 ### Patch Changes
