@@ -10,6 +10,7 @@ import yoctoSpinner from "yocto-spinner";
 import { startServerOnce } from "../server";
 
 const program = new Command();
+const mydbportalUrl = "https://mydbportal.com/";
 const spinner = yoctoSpinner({ text: "mydbportal…" }).start();
 program
   .name("mydbportal-cli")
@@ -25,7 +26,7 @@ program
     const token = decrypt(dtoken);
 
     spinner.start();
-    const res = await fetch("http://localhost:3000/api/cli", {
+    const res = await fetch(`${mydbportalUrl}/api/cli`, {
       headers: {
         Cookie: `authjs.session-token=${token}`,
       },
@@ -57,14 +58,11 @@ program
 
     spinner.start();
 
-    const results = await fetch(
-      `http://localhost:3000/api/cli/${answer.database}`,
-      {
-        headers: {
-          Cookie: `authjs.session-token=${token}`,
-        },
-      }
-    );
+    const results = await fetch(`${mydbportalUrl}/api/cli${answer.database}`, {
+      headers: {
+        Cookie: `authjs.session-token=${token}`,
+      },
+    });
     spinner.success();
     const data = await results.json();
 
@@ -79,7 +77,7 @@ program
 
     const token = decrypt(dtoken);
     spinner.start();
-    const res = await fetch("http://localhost:3000/api/cli", {
+    const res = await fetch(`${mydbportalUrl}/api/cli`, {
       headers: {
         Cookie: `authjs.session-token=${token}`,
       },
@@ -117,7 +115,7 @@ program
     formData.append("type", dbtype.type);
     formData.append("serverId", serverid.server);
     spinner.start("Creating database");
-    const result = await fetch("http://localhost:3000/api/cli", {
+    const result = await fetch(`${mydbportalUrl}/api/cli`, {
       method: "POST",
       headers: {
         Cookie: `authjs.session-token=${token}`,

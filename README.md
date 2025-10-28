@@ -1,9 +1,7 @@
 # mydbportal-cli
 
-CLI to control your databases
-
 ## Description:
-mydbportal CLI is a simple command-line tool that helps developers connect to and manage their databases on mydbportal.com
+mydbportal CLI is a  command-line tool that helps developers connect to and manage their databases on mydbportal.com
 
 ## Installation
 

@@ -1,15 +1,15 @@
 {
   "name": "mydbportal-cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "module": "./dist/command.mjs",
   "type": "module",
   "main": "./dist/command.js",
   "types": "./dist/command.d.ts",
   "bin": {
-    "mydb": "dist/command.js"
+    "mydb": "./dist/command.js"
   },
   "scripts": {
-    "build": "tsup ",
+    "build": "tsup src/commands/command.ts --format esm,cjs --dts",
     "dev": "tsc -w",
     "lint": "tsc",
     "ci": "bun run lint  && bun run build ",

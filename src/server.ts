@@ -20,6 +20,7 @@ export async function startServerOnce() {
     });
 
     const shutdown = (reason: string) => {
+      console.log("successfully logged in");
       server.close(() => {
         resolve();
       });
