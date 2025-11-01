@@ -1,5 +1,11 @@
 # mydbportal-cli
 
+## 0.3.2
+
+### Patch Changes
+
+- added license
+
 ## 0.3.1
 
 ### Patch Changes

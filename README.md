@@ -25,13 +25,13 @@ This command will open a browser window, prompting you to authenticate with your
 
 ### Commands
 
+ list all your available databases:
 ```bash
 mydb list
 ```
- list all your available databases:
 
+To create a new database:
 
 ```bash
 mydb create
 ```
-To create a new database:
