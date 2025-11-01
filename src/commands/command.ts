@@ -10,7 +10,7 @@ import yoctoSpinner from "yocto-spinner";
 import { startServerOnce } from "../server";
 
 const program = new Command();
-const mydbportalUrl = "https://mydbportal.com/";
+const mydbportalUrl = "http://localhost:3000";
 const spinner = yoctoSpinner({ text: "mydbportal…" }).start();
 program
   .name("mydbportal-cli")
@@ -58,7 +58,7 @@ program
 
     spinner.start();
 
-    const results = await fetch(`${mydbportalUrl}/api/cli${answer.database}`, {
+    const results = await fetch(`${mydbportalUrl}/api/cli/${answer.database}`, {
       headers: {
         Cookie: `authjs.session-token=${token}`,
       },
@@ -143,9 +143,9 @@ program
   .command("login")
   .description("login to mydbportal")
   .action(async () => {
-    spinner.start("Openning browser");
-    await oauthSignIn();
-    spinner.success();
+    spinner.success("openning browser");
+    oauthSignIn();
+    spinner.stop();
     await startServerOnce();
   });
 program.parse();

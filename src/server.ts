@@ -26,17 +26,10 @@ export async function startServerOnce() {
       });
     };
 
-    app.get("/", async (req: Request, res: Response) => {
-      const cookies = req.headers.cookie;
-      if (!cookies) {
-        res.status(400).send("No cookies found");
-        return;
-      }
+    app.post("/", async (req: Request, res: Response) => {
+      const cookies = await req.body;
 
-      const token = cookies
-        ?.split(";")
-        .find((c) => c.trim().startsWith("authjs.session-token="))
-        ?.split("=")[1];
+      const token = cookies.value;
 
       if (!token) {
         res.status(400).send("No token found");
@@ -46,9 +39,9 @@ export async function startServerOnce() {
       const encrypted = encrypt(token);
       saveGlobalKey(encrypted);
 
-      res.send("Logged in successfully, You can close this tab.");
+      res.json({ message: "success" });
 
-      shutdown("Token captured successfully");
+      setTimeout(() => shutdown("Token captured successfully"), 100);
     });
 
     setTimeout(() => {
