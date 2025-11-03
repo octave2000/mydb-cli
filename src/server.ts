@@ -5,6 +5,7 @@ import { encrypt, saveGlobalKey } from "./utils";
 
 const PORT = 5000;
 
+//callable server
 export async function startServerOnce() {
   return new Promise<void>((resolve, reject) => {
     const tPath = path.join(process.cwd(), "t");

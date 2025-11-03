@@ -17,6 +17,7 @@ program
   .description("CLI to control your databases")
   .version("0.0.1");
 
+//list databases command
 program
   .command("list")
   .description("List all your databases")
@@ -69,6 +70,7 @@ program
     console.log(data);
   });
 
+//create database command
 program
   .command("create")
   .description("Create database")
