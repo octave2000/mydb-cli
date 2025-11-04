@@ -1,6 +1,6 @@
 {
   "name": "mydbportal-cli",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "module": "./dist/command.mjs",
   "type": "module",
   "main": "./dist/command.js",
@@ -24,9 +24,11 @@
   },
   "dependencies": {
     "@changesets/cli": "^2.29.7",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/inquirer": "^9.0.9",
     "commander": "^14.0.1",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "inquirer": "9.3.0",
     "install": "^0.13.0",

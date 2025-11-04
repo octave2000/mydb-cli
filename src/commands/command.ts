@@ -10,7 +10,7 @@ import yoctoSpinner from "yocto-spinner";
 import { startServerOnce } from "../server";
 
 const program = new Command();
-const mydbportalUrl = "https://mydbportal.com";
+const mydbportalUrl = "http://localhost:300";
 const spinner = yoctoSpinner({ text: "mydbportal…" }).start();
 program
   .name("mydbportal-cli")
