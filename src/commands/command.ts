@@ -10,12 +10,12 @@ import yoctoSpinner from "yocto-spinner";
 import { startServerOnce } from "../server";
 
 const program = new Command();
-const mydbportalUrl = "http://localhost:300";
+const mydbportalUrl = "https://mydbportal.com";
 const spinner = yoctoSpinner({ text: "mydbportal…" }).start();
 program
   .name("mydbportal-cli")
-  .description("CLI to control your databases")
-  .version("0.0.1");
+  .description("CLI to control your mydbportal databases")
+  .version("0.3.5");
 
 //list databases command
 program

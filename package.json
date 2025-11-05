@@ -1,6 +1,6 @@
 {
   "name": "mydbportal-cli",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "module": "./dist/command.mjs",
   "type": "module",
   "main": "./dist/command.js",

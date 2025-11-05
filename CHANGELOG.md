@@ -1,5 +1,11 @@
 # mydbportal-cli
 
+## 0.3.5
+
+### Patch Changes
+
+- corrected url issue
+
 ## 0.3.4
 
 ### Patch Changes

@@ -6,7 +6,7 @@ mydbportal CLI is a  command-line tool that helps developers connect to and mana
 ## Installation
 
 ```bash
-bun install -g mydbportal-cli
+npm install -g mydbportal-cli
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ Follow these steps to use the `mydbportal-cli`:
 ### Step 2: Before you can use any other commands, you need to log in to your mydbportal cli.
 
 ```bash
-mydb login
+npx mydb login
 ```
 
 This command will open a browser window, prompting you to authenticate with your Google account. Once authenticated, you can close the browser tab.
@@ -27,11 +27,11 @@ This command will open a browser window, prompting you to authenticate with your
 
  list all your available databases:
 ```bash
-mydb list
+npx mydb list
 ```
 
-To create a new database:
+To create a new database run this command inside your project:
 
 ```bash
-mydb create
+npx mydb create
 ```
